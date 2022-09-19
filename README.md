@@ -2,7 +2,7 @@
 
 Simple SDK/Class to approach the workflow for requesting Runtime System Permission.
 
-From Android Marshmallow (API >= 23), Google has introduced a runtime permission model. As a developer, implementing permissions in Android is a bit difficult task. So, I have made a simple SDK that makes it easier to implement.
+From Android Marshmallow (API >= 23), Google has introduced a runtime permission model. As a developer, implementing permissions in all the Activities/Fragments is a bit redundant. So, I have made a simple SDK that makes it easier to implement.
 
 ## Summary
 I've created the ```RuntimePermission``` class which required ```FragmentActivity(Base class for activities)``` to be passed in the constructor. It also inherits the ```LifecycleEventObserver``` to observe the lifecycle change and dispatch the result to the receiver.
@@ -14,13 +14,13 @@ First of all, we need to initialize the RuntimePermission class in ```Activity``
 
 In _Activity_:
 ```js
-runtimePermission = RuntimePermission(this)
+val runtimePermission = RuntimePermission(this)
 lifecycle.addObserver(runtimePermission)
 ```
 
 In _Fragment_:
 ```js
-runtimePermission = RuntimePermission(requireActivity())
+val runtimePermission = RuntimePermission(requireActivity())
 lifecycle.addObserver(runtimePermission)
 ```
 
