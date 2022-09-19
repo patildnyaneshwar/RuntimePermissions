@@ -40,7 +40,7 @@ There are a few things to note:
 - Finally, ```RuntimePermission#result{...}``` callback has ```DetailedPermissionResult(...)```, ```IsPermissionGranted(...)```, ```NegativeButtonClicked```, ```NeutralButtonClicked```. Incase ```IsPermissionGranted(false)``` show the ```RuntimePermission#settingsDialog(...)``` onClick of ```RuntimePermission#settingsDialog#PositiveButton``` naviagtes to application settings, where user has to maunlly provide the access.
 
 ## Examples
-##### _Single permission request_
+### _Single permission request_
 Here in permission request ```RuntimePermission#setDetailedPermissionRequired(...)``` not at all called (Default false). So, ```RuntimePermission#PermissionResult#IsPermissionGranted(...)``` will be triggered which will return a boolean value that tells whether all permissions are granted or not.
 
 And, ```RuntimePermission#showRationalePermission(...)``` set to true. If the user "deny" permission ```Rationale Dialog``` will be triggered where the user will act accordingly. In case the user select "Never Ask Again" ```RuntimePermission#PermissionResult#IsPermissionGranted(...)``` will always be false and the application has to act accordingly.
@@ -92,7 +92,7 @@ cameraButton.setOnClickListener {
         }
 ```
 
-##### _Multiple permission request_
+### _Multiple permission request_
 Here in permission request ```RuntimePermission#setDetailedPermissionRequired(...)``` set to true. So, ```RuntimePermission#PermissionResult#DetailedPermissionResult(...)``` will be triggered which will return detailed permission, a receiver as requested. Where the developer has to handle how the application should act accordingly.
 
 And, ```RuntimePermission#showRationalePermission(...)``` method is not called. Therefore ```Rationale dialog``` will not be triggered in case the user "denies" permission, instead "isGranted = false" in the callback.
@@ -138,7 +138,7 @@ cameraLocationButton.setOnClickListener {
         }
 ```
 
-##### _Incomplete permission request_
+### _Incomplete permission request_
 As you know from Android 11 (API >= 30) ```WRITE_EXTERNAL_STORAGE``` and ```READ_EXTERNAL_STORAGE```were removed, instead, we need to use ```MANAGE_EXTERNAL_STORAGE```(permission prompt dialog will not show, instead navigate to settings) to access storage. So, set ```RuntimePermission#setDetailedPermissionRequired(...)```  to true and act accordingly.
 
 ```js
