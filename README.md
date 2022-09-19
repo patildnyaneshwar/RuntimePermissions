@@ -29,7 +29,7 @@ and in the onDestroy() method it's required to remove the lifecycle observer
 lifecycle.removeObserver(runtimePermission)
 ```
 
-#### Request Permissions
+## Request Permissions
 The example below shows how to request permissions for the method.
 There are a few things to note:
 
