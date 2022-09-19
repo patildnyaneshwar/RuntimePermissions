@@ -13,13 +13,13 @@ Here, We will be using ```new ActivityResultLauncher API``` while asking for run
 First of all, we need to initialize the RuntimePermission class in ```Activity``` or ```Fragment``` and add a lifecycle observer.
 
 In _Activity_:
-```
+```js
 runtimePermission = RuntimePermission(this)
 lifecycle.addObserver(runtimePermission)
 ```
 
 In _Fragment_:
-```
+```js
 runtimePermission = RuntimePermission(requireActivity())
 lifecycle.addObserver(runtimePermission)
 ```
@@ -47,7 +47,7 @@ And, ```RuntimePermission#showRationalePermission(...)``` set to true. If the us
 
 *Note:* Entered text shouldn't be empty otherwise the application will ```throw IllegalArgumentException(...)```
 
-```
+```js
 cameraButton.setOnClickListener {
             runtimePermission
                 .requestPermissions(Manifest.permission.CAMERA)
@@ -97,7 +97,7 @@ Here in permission request ```RuntimePermission#setDetailedPermissionRequired(..
 
 And, ```RuntimePermission#showRationalePermission(...)``` method is not called. Therefore ```Rationale dialog``` will not be triggered in case the user "denies" permission, instead "isGranted = false" in the callback.
 
-```
+```js
 cameraLocationButton.setOnClickListener {
             runtimePermission
                 .requestPermissions(
@@ -141,7 +141,7 @@ cameraLocationButton.setOnClickListener {
 ##### _Incomplete permission request_
 As you know from Android 11 (API >= 30) ```WRITE_EXTERNAL_STORAGE``` and ```READ_EXTERNAL_STORAGE```were removed, instead, we need to use ```MANAGE_EXTERNAL_STORAGE```(permission prompt dialog will not show, instead navigate to settings) to access storage. So, set ```RuntimePermission#setDetailedPermissionRequired(...)```  to true and act accordingly.
 
-```
+```js
 readWriteButton.setOnClickListener {
             val requestPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 arrayOf(
@@ -200,3 +200,9 @@ readWriteButton.setOnClickListener {
 I hope this SDK will be helpful for you. Feel free to give your feedback. I would be very happy to get new suggestions and modifications in the code.
 
 Happy coding :)
+
+## Reference
+
+```
+https://github.com/googlesamples/easypermissions
+```
