@@ -1,8 +1,12 @@
 package com.runtimepermissions.permission
 
+import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.view.View
@@ -279,24 +283,31 @@ class RuntimePermission constructor(@NonNull private val activity: FragmentActiv
     /**
      * Navigates the app to settings
      * */
-    fun notificationSettingsDialog(
+    fun settingsDialog(
         @NonNull description: String,
         @NonNull positiveText: String,
-        @NonNull isCancelable: Boolean
+        @NonNull isCancelable: Boolean,
+        @NonNull action: String
     ) {
         when {
             description.isEmpty() -> throw IllegalArgumentException("Description text should not be empty")
             positiveText.isEmpty() -> throw IllegalArgumentException("Positive Button text should not be empty")
+            action.isEmpty() -> throw IllegalArgumentException("Settings action should not be empty")
         }
         val builder = AlertDialog.Builder(activity)
         builder.setMessage(description)
         builder.setPositiveButton(positiveText) { dialog, _ ->
             dialog.dismiss()
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            val uri: Uri = Uri.fromParts("package", activity.packageName, null)
-            intent.data = uri
-            activity.startActivity(intent)
+            try {
+                val intent = Intent(action)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val uri: Uri = Uri.fromParts("package", activity.packageName, null)
+                intent.data = uri
+                activity.startActivity(intent)
+            } catch (activityNotFoundException: ActivityNotFoundException) {
+                val intent = Intent(action)
+                activity.startActivity(intent)
+            }
         }
         builder.setCancelable(isCancelable)
         builder.show()
@@ -350,7 +361,7 @@ class RuntimePermission constructor(@NonNull private val activity: FragmentActiv
             Lifecycle.Event.ON_PAUSE -> {}
             Lifecycle.Event.ON_STOP -> {}
             Lifecycle.Event.ON_DESTROY -> {
-                permissionsResult = null
+                permissionsResult?.unregister()
             }
             Lifecycle.Event.ON_ANY -> {}
         }
