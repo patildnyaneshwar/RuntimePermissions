@@ -1,4 +1,4 @@
-package com.runtimepermissions.permission
+package com.manager.runtimepermission
 
 import android.Manifest
 import android.content.ActivityNotFoundException
