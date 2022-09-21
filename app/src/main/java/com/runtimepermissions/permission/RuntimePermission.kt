@@ -301,7 +301,7 @@ class RuntimePermission constructor(@NonNull private val activity: FragmentActiv
             try {
                 val intent = Intent(action)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                val uri: Uri = Uri.fromParts("package", activity.packageName, null)
+                val uri: Uri = Uri.fromParts("package", activity.application.packageName, null)
                 intent.data = uri
                 activity.startActivity(intent)
             } catch (activityNotFoundException: ActivityNotFoundException) {

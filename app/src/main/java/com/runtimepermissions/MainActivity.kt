@@ -133,23 +133,43 @@ class MainActivity : AppCompatActivity() {
                 .setNegativeButton("Cancel")
                 .setNeutralButton("May be later")
                 .setRationaleDialogCancelable(true)
+                .setDetailedPermissionRequired(true)
                 .result { result ->
                     when (result) {
                         is RuntimePermission.PermissionResult.DetailedPermissionResult -> {
+                            var isStoragePermissionGranted = false
                             result.detailedPermission.forEach {
                                 Log.d(TAG, "Permission ${it.key} is allowed ${it.value}")
+                                when(it.key) {
+                                    Manifest.permission.MANAGE_EXTERNAL_STORAGE -> {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                                            Environment.isExternalStorageManager()) {
+                                            isStoragePermissionGranted = true
+                                        }
+                                    }
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE -> {
+                                        isStoragePermissionGranted = it.value
+                                        if (!it.value) {
+                                            return@forEach
+                                        }
+                                    }
+                                }
                             }
 
-                            if (result.isGranted) {
-                                Log.d(TAG, "Permission Granted")
-                                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Log.e(TAG, "Permission Denied")
+                            if (!isStoragePermissionGranted) {
+                                val action = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                    Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                                } else {
+                                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                }
+
                                 runtimePermission.settingsDialog(
                                     "To Continue give access to app",
                                     "Settings",
                                     true,
-                                    Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                                    action)
+                            } else {
+                                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
                             }
                         }
                         is RuntimePermission.PermissionResult.IsPermissionGranted -> {}
